@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <h3>Update the values</h3>
+    <select id="select">
+        <option>---</option>
+        <option value="0">JAN</option>
+        <option value="1">FEB</option>
+        <option value="2">MAR</option>
+        <option value="3">APR</option>
+        <option value="4">MAY</option>
+        <option value="5">JUNE</option>
+        <option value="6">JULY</option>
+        <option value="7">AUG</option>
+        <option value="8">SEP</option>
+        <option value="9">OCT</option>
+        <option value="10">NOV</option>
+        <option value="11">DEC</option>
+    </select>
+    <input placeholder="enter the attendence" name="Attendence" id="Attendence"/>
+    <input placeholder="enter the performance" name="Performance" id="Performance"/>
+    <button onclick="setdata()">Submit</button>
+    <button onclick="Rmvdata()">Remove last set</button>
+    <canvas id="myChart" ></canvas>
+</body>
+</html>
+<script>
+
+    let months=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
+    var myChart=null;
+    window.addEventListener("load",()=>{
+        mydata()
+    })
+
+   //add and edit data
+    function setdata()
+    {
+        let val=document.getElementById("select").value
+        let att=document.getElementById("Attendence").value
+        let per=document.getElementById("Performance").value
+
+        if(myChart!=null)
+        {
+            if(!myChart.data.labels.includes(months[val]))
+            {
+                myChart.data.labels.push(months[val])
+            }
+            if(myChart.data.datasets[0].data[val]==undefined)
+                {
+                    myChart.data.datasets[0].data.push(Number(att))
+                }
+                else
+                {
+                    myChart.data.datasets[0].data[val]=Number(att)
+                }
+            if(myChart.data.datasets[1].data[val]==undefined)
+                {
+                    myChart.data.datasets[1].data.push(Number(per))
+                }
+                else
+                {
+                    myChart.data.datasets[1].data[val]=Number(per)
+                }    
+                console.log(myChart)
+                myChart.update()
+        }
+
+    }
+
+
+    //remove data
+    function Rmvdata()
+    {
+        if(myChart!=null && myChart.data.labels.length>0)
+        {
+            myChart.data.labels.pop()
+            myChart.data.datasets[0].data.pop()
+            myChart.data.datasets[1].data.pop()
+            myChart.update()
+        }
+    }
+
+ //load data
+    function mydata()
+    {
+        const ctx = document.getElementById('myChart').getContext('2d');
+    myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["JAN","FEB","MAR","APR","MAY","JUN","JUL"],
+            datasets: [{
+                label: 'Attendence',
+                data: [80,70,60,60,50,60,90],
+                backgroundColor: [
+                    'rgba(252, 203, 153, 1)',
+                    'rgba(252, 203, 153, 1)',
+                    'rgba(252, 203, 153, 1)',
+                    'rgba(252, 203, 153, 1)',
+                    'rgba(252, 203, 153, 1)',
+                    'rgba(252, 203, 153, 1)',
+                ],
+                borderWidth: 1
+            },{
+                label: 'Performance',
+                data:[65,75,40,50,55,30,90],
+                backgroundColor: [
+                    'rgba(255, 0, 0, 1)',
+                    'rgba(255, 0, 0, 1)',
+                    'rgba(255, 0, 0, 1)',
+                    'rgba(255, 0, 0, 1)',
+                    'rgba(255, 0, 0, 1)',
+                    'rgba(255, 0, 0, 1)'
+                ],
+                borderWidth: 1
+            },
+        ]
+        },
+        options: {
+        scales: {
+            y: {
+                beginAtZero: false
+            }
+        }
+    }
+    });
+    }
+
+
+    
+    </script>
